@@ -4,4 +4,3 @@ function hideSelf() {
     e.target.hidden = true;
   });
 }
-hideSelf();
