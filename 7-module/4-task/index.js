@@ -108,5 +108,10 @@ export default class StepSlider {
     document.removeEventListener('pointermove', this._pointerMove);
     document.removeEventListener('pointerup', this._pointerUp);
     this.elem.classList.remove('slider_dragging');
+
+    this.elem.dispatchEvent(new CustomEvent('slider-change', {
+      detail: this.value,
+      bubbles: true
+    }));
   }
 }
