@@ -1,11 +1,9 @@
-import createElement from '../../assets/lib/create-element.js';
-
-export default class RibbonMenu {
+class RibbonMenu {
   constructor(categories) {
     this.categories = categories;
     this.render();
     this.initialize();
-    this.updateArrows();
+
   }
 
   get elem() {
@@ -13,39 +11,30 @@ export default class RibbonMenu {
   }
 
   render() {
-    this._elem = document.createElement('div');
-    this._elem.className = 'ribbon';
 
-    this.nav = document.createElement('nav');
-    this.nav.className = 'ribbon__inner';
+    this._elem = createElement(`
+      <div class="ribbon">
+        <button class="ribbon__arrow ribbon__arrow_left">
+          <img src="../../assets/images/icons/angle-icon.svg" alt="icon" />
+        </button>
+        <nav class="ribbon__inner"></nav>
+        <button class="ribbon__arrow ribbon__arrow_right ribbon__arrow_visible">
+          <img src="../../assets/images/icons/angle-icon.svg" alt="icon" />
+        </button>
+      </div>
+    `);
 
-    this.arrowLeft = document.createElement('button');
-    this.arrowLeft.className = 'ribbon__arrow ribbon__arrow_left ribbon__arrow_visible';
-    this.arrowLeft.innerHTML = `<img src="/assets/images/icons/angle-icon.svg" alt="icon">`;
-
-    this.arrowRight = document.createElement('button');
-    this.arrowRight.className = 'ribbon__arrow ribbon__arrow_right';
-    this.arrowRight.innerHTML = `<img src="/assets/images/icons/angle-icon.svg" alt="icon">`;
-
-    this.itemLinks = [];
     for (let category of this.categories) {
-      const itemLink = document.createElement('a');
-      itemLink.setAttribute('href', '#');
-      itemLink.className = 'ribbon__item';
-      if (category.id === '' || category.id === 'all') {
-        itemLink.classList.add('ribbon__item_active');
-      }
-      itemLink.setAttribute('data-id', category.id);
-      itemLink.textContent = category.name;
-      
-      this.nav.appendChild(itemLink);
-      this.itemLinks.push(itemLink);
-      
+      let categoryElem = createElement(`<a href="#" class="ribbon__item"></a>`);
+      categoryElem.textContent = category.name;
+      categoryElem.dataset.id = category.id;
+      this._elem.querySelector('.ribbon__inner').append(categoryElem);
     }
 
-    this._elem.appendChild(this.nav);
-    this._elem.appendChild(this.arrowLeft);
-    this._elem.appendChild(this.arrowRight);
+    this.nav = this._elem.querySelector('nav.ribbon__inner');
+    this.arrowLeft = this._elem.querySelector('button.ribbon__arrow_left');
+    this.arrowRight = this._elem.querySelector('button.ribbon__arrow_right');
+    this._elem.querySelector('.ribbon__item').classList.add('ribbon__item_active');
   }
 
   initialize() {
@@ -89,18 +78,23 @@ export default class RibbonMenu {
     const scrollLeft = inner.scrollLeft;
     const scrollWidth = inner.scrollWidth;
     const clientWidth = inner.clientWidth;
-    const scrollRight = scrollWidth - scrollLeft - clientWidth;
+    let  scrollRight = scrollWidth - scrollLeft - clientWidth;
 
-    if (scrollLeft < 1) {
-      this.arrowLeft.classList.remove('ribbon__arrow_visible');
-    } else {
+    if (inner.scrollLeft > 0) {
       this.arrowLeft.classList.add('ribbon__arrow_visible');
+    } 
+    else {
+      this.arrowLeft.classList.remove('ribbon__arrow_visible');
     }
 
-    if (scrollRight < 1) {
-      this.arrowRight.classList.remove('ribbon__arrow_visible');
-    } else {
+    scrollRight = scrollRight < 1 ? 0 : scrollRight;
+    if (scrollRight > 0) {
       this.arrowRight.classList.add('ribbon__arrow_visible');
+    } 
+    else {
+      this.arrowRight.classList.remove('ribbon__arrow_visible');
+
     }
+
   }
 }
