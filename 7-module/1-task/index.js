@@ -1,9 +1,10 @@
-class RibbonMenu {
-  constructor(categories) {
-    this.categories = categories;
-    this.render();
-    this.initialize();
+import createElement from '../../assets/lib/create-element.js';
 
+export default class RibbonMenu {
+  constructor(categories) {
+      this.categories = categories;
+      this.render();
+      this.initialize();
   }
 
   get elem() {
@@ -26,7 +27,7 @@ class RibbonMenu {
 
     for (let category of this.categories) {
       let categoryElem = createElement(`<a href="#" class="ribbon__item"></a>`);
-      categoryElem.textContent = category.name;
+      categoryElem.textContent = category.name; // insert as text, not as HTML!
       categoryElem.dataset.id = category.id;
       this._elem.querySelector('.ribbon__inner').append(categoryElem);
     }
@@ -78,22 +79,19 @@ class RibbonMenu {
     const scrollLeft = inner.scrollLeft;
     const scrollWidth = inner.scrollWidth;
     const clientWidth = inner.clientWidth;
-    let  scrollRight = scrollWidth - scrollLeft - clientWidth;
+    const scrollRight = scrollWidth - scrollLeft - clientWidth;
 
     if (inner.scrollLeft > 0) {
       this.arrowLeft.classList.add('ribbon__arrow_visible');
-    } 
-    else {
+    } else {
       this.arrowLeft.classList.remove('ribbon__arrow_visible');
     }
 
     scrollRight = scrollRight < 1 ? 0 : scrollRight;
     if (scrollRight > 0) {
       this.arrowRight.classList.add('ribbon__arrow_visible');
-    } 
-    else {
+    } else {
       this.arrowRight.classList.remove('ribbon__arrow_visible');
-
     }
 
   }
