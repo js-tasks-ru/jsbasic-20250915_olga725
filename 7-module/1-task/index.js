@@ -36,6 +36,7 @@ export default class RibbonMenu {
     this.arrowLeft = this._elem.querySelector('button.ribbon__arrow_left');
     this.arrowRight = this._elem.querySelector('button.ribbon__arrow_right');
     this._elem.querySelector('.ribbon__item').classList.add('ribbon__item_active');
+    this.itemLinks = this._elem.querySelectorAll('.ribbon__item');
   }
 
   initialize() {
@@ -79,7 +80,7 @@ export default class RibbonMenu {
     const scrollLeft = inner.scrollLeft;
     const scrollWidth = inner.scrollWidth;
     const clientWidth = inner.clientWidth;
-    const scrollRight = scrollWidth - scrollLeft - clientWidth;
+    let scrollRight = scrollWidth - scrollLeft - clientWidth;
 
     if (inner.scrollLeft > 0) {
       this.arrowLeft.classList.add('ribbon__arrow_visible');
